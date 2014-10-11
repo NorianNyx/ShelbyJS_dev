@@ -45,6 +45,6 @@ require('../server/customroutes.js')(app, passport);
 require('../server/routes.js')(app, passport);
 
 //start server
-server.listen(process.env.PORT, function () {
-   console.log('The magic happens on port ' + process.env.PORT);
+server.listen(process.env.PORT || 80, function () {
+   console.log('The magic happens on port ' + process.env.PORT || 80);
 });
