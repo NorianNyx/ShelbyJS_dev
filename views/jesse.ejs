@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title><%= siteInfo.sitename %></title>
+        <link href="/bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
+        <link href="/bower_components/fancybox/source/jquery.fancybox.css" rel="stylesheet" />
+    </head>
+    <body>
+        <% if (isInAllRoles(userRoles, ['Administrator', 'HandsomeMan'])) { %>
+            <% include /partials/admin/adminbar.ejs %>
+        <% } %>
+        <% include /partials/header.ejs %>
+        <% if (isInAllRoles(userRoles, ['HandsomeMan'])) { %>
+            <% include /modules/profile.ejs %>
+        <% } %>
+        <% include /partials/footer.ejs %>
+        <pre>
+        @@@@@@           @@@@@@
+      @@@@@@@@@@       @@@@@@@@@@
+    @@@@@@@@@@@@@@   @@@@@@@@@@@@@@
+  @@@@@@@@@@@@@@@@@ @@@@@@@@@@@@@@@@@
+ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+  @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+   @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+    @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+      @@@@@@@@@@@@@@@@@@@@@@@@@@@
+        @@@@@@@@@@@@@@@@@@@@@@@
+          @@@@@@@@@@@@@@@@@@@
+            @@@@@@@@@@@@@@@
+              @@@@@@@@@@@
+                @@@@@@@
+                  @@@
+                   @
+                   </pre>
+
+        <script src="/bower_components/jquery/dist/jquery.min.js"></script>
+        <script src="/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+        <script src="/bower_components/fancybox/source/jquery.fancybox.js"></script>
+        <script src="/js/signup.js"></script>
+    </body>
+</html>

@@ -1,0 +1,7 @@
+{
+    "sitename" : "ShelbyJS",
+    "copyright": "© 2014 Chris Willis. All rights reserved.",
+    "database" : {
+        "url": "mongodb://nyx:6676Mar93@ds039000.mongolab.com:39000/nyx"
+    }
+}

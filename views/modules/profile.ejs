@@ -1,0 +1,96 @@
+<% if (message.length > 0) { %>
+    <div class="alert alert-danger" style="display: block; margin: 40px; margin-bottom: 10px; margin-top: 10px;"><%= message %></div>
+<% } %>
+<div class="container">
+    <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xs-offset-0 col-sm-offset-0 col-md-offset-3 col-lg-offset-3 toppad">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title"><%= user.Local.Username %></h3>
+                </div>
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-md-3 col-lg-3 " align="center">
+                            <img alt="User Pic" src="<%= gravatarUrl %>" style="height: 100px; width: 100px;">
+                        </div>
+                        <div class="col-md-9 col-lg-9 ">
+                            <table class="table table-user-information">
+                                <tbody>
+                                    <tr>
+                                        <td>Name:</td>
+                                        <td><%= user.Local.FirstName + ' ' + user.Local.LastName %></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Address:</td>
+                                        <td>
+                                            <%= user.Local.Address.Street %><br />
+                                            <%= user.Local.Address.City + ', ' + user.Local.Address.State + ' ' + user.Local.Address.Zip %>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Email:</td>
+                                        <td><%= user.Local.Email %></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <button class="btn btn-primary" onclick="$.fancybox('#editProfile', { closeBtn: false });">Edit Profile</button>
+                            <button class="btn btn-default" onclick="$.fancybox('#changePassword', { closeBtn: false });">Change Password</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div style="display: none; padding: 10px; padding-top: 0px; width: 300px;" id="editProfile">
+        <h3>Edit Profile</h3>
+        <hr />
+        <form action='/shelby/updateProfile' method='post'>
+            <div class="form-group">
+                <input type="text" placeholder="First Name" class="form-control" name="firstname" value="<%= user.Local.FirstName %>">
+            </div>
+            <div class="form-group">
+                <input type="text" placeholder="Last Name" class="form-control" name="lastname" value="<%= user.Local.LastName %>">
+            </div>
+            <div class="form-group">
+                <input type="text" placeholder="Email" class="form-control" name="email" value="<%= user.Local.Email %>">
+            </div>
+            <div class="form-group">
+                <input type="text" placeholder="Street" class="form-control" name="street" value="<%= user.Local.Address.Street %>">
+            </div>
+            <div class="form-group">
+                <input type="text" placeholder="City" class="form-control" name="city" value="<%= user.Local.Address.City %>">
+            </div>
+            <div class="form-group">
+                <input type="text" placeholder="State" class="form-control" name="state" value="<%= user.Local.Address.State %>">
+            </div>
+            <div class="form-group">
+                <input type="text" placeholder="Zip" class="form-control" name="zip" value="<%= user.Local.Address.Zip %>">
+            </div>
+            <hr />
+            <button class="btn btn-primary">Save</button>
+            <input type="reset" class="btn btn-secondary" value="Cancel" onclick="$.fancybox.close();" />
+        </form>
+    </div>
+    <div style="display: none; padding: 10px; padding-top: 0px; width: 300px;" id="changePassword">
+        <h3>Change Password</h3>
+        <hr />
+        <form action="/shelby/updatePassword" method="post">                    
+            <div class="form-group">
+                <input type="password" placeholder="Current Password" class="form-control" name="password" id="changePassword_password">
+            </div>
+            <div class="form-group has-feedback">
+                <label class="control-label sr-only"></label>
+                <input type="password" placeholder="New Password" class="form-control" name="newpassword" id="changePassword_newPassword">
+                <span class="glyphicon form-control-feedback" style="display: none;"></span>
+            </div>
+            <div class="form-group has-feedback">
+                <label class="control-label sr-only"></label>
+                <input type="password" placeholder="Confirm Password" class="form-control" name="cofirmpassword" id="changePassword_confirmNewPassword">
+                <span class="glyphicon form-control-feedback" style="display: none;"></span>
+            </div>
+            <hr />
+            <button class="btn btn-primary">Save</button>
+            <input type="reset" class="btn btn-secondary" value="Cancel" onclick="$.fancybox.close();" id="changePassword_cancelBtn" />
+        </form>
+    </div>
+</div>
