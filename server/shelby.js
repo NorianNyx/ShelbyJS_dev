@@ -49,7 +49,7 @@ module.exports = function (app, passport) {
     app.post('/shelby/createView', isAdmin, function (req, res) {
         fs.exists('../views/' + req.body.pagename.toLowerCase() + '.ejs', function (exists) {
             if (!exists) {
-                var rs = fs.createReadStream('../components/templates/view.ejs');
+                var rs = fs.createReadStream('../components/shelby/templates/view.ejs');
                 var ws = fs.createWriteStream('../views/' + req.body.pagename.toLowerCase() + '.ejs');
                 rs.on('error', function (err) {
                     res.send(err);

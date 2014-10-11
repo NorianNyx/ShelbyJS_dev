@@ -13,10 +13,13 @@ var passport      = require('passport');
 var flash         = require('connect-flash')();
 var mongoose      = require('mongoose');
 var configDB      = require('../config/site.json').database.url;
+var engine        = require('ejs-locals');
 
 //configure app
-require('multi-views').setupMultiViews(app);
+app.engine('ejs', engine);
 app.set('view engine', 'ejs');
+
+require('multi-views').setupMultiViews(app);
 app.set('views', ['../views/admin', '../views']);
 
 mongoose.connect(configDB);
