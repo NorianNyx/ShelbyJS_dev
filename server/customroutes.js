@@ -4,10 +4,6 @@ var User     = require('../models/user.js');
 var helpers  = require('../server/helpers.js');
 
 module.exports = function (app, passport) {
-    app.get('/jesse', function (req, res) {
-        getUserRoles(req, res, '404');
-    });
-    
     function isAuthenticated(req, res, next) {
         if (req.isAuthenticated()) {
             next();

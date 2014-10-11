@@ -2,6 +2,7 @@ var gravatar = require('gravatar');
 var fs       = require('fs');
 var siteInfo = require('../config/site.json');
 var User     = require('../models/user.js');
+var path     = require('path');
 
 module.exports = function (app, passport) {
     app.get('/', function (req, res) {
@@ -26,31 +27,31 @@ module.exports = function (app, passport) {
     });
     
     app.get('/:view', function (req, res) {
-        if (req.isAuthenticated()) {
-            fs.exists('../views/' + req.params.view + '.ejs', function (exists) {
-                if (exists) {
+        fs.exists('../views/' + req.params.view + '.ejs', function (exists) {
+            if (exists) {
+                if (req.isAuthenticated()) {
                     getUserRoles(req, res, req.params.view);
                 } else {
-                    getUserRoles(req, res, '404');
+                    renderPage(req, res, [], req.params.view);
                 }
-            });
-        } else {
-            renderPage(req, res, [], '404');
-        }
+            } else {
+                renderPage(req, res, [], '404');
+            }
+        });
     });
     
     app.get('/*', function (req, res) {
-        if (req.isAuthenticated()) {
-            fs.exists('../views/' + req.params.view + '.ejs', function (exists) {
-                if (exists) {
-                    getUserRoles(req, res, req.url.split('/')[1]);
+        fs.exists('../views/' + req.params.view + '.ejs', function (exists) {
+            if (exists) {
+                if (req.isAuthenticated()) {
+                    getUserRoles(req, res, req.params.view);
                 } else {
-                    getUserRoles(req, res, '404');
+                    renderPage(req, res, [], req.params.view);
                 }
-            });
-        } else {
-            renderPage(req, res, [], '404');
-        }
+            } else {
+                renderPage(req, res, [], '404');
+            }
+        });
     });
     
     app.post('/login', passport.authenticate('local-login', {
