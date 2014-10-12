@@ -1,9 +1,8 @@
 var gravatar = require('gravatar');
 var siteInfo = require('../config/site.json');
 var User     = require('../models/user.js');
-var helpers  = require('../server/helpers.js');
 
-module.exports = function (app, passport) {
+module.exports = function (app) {
     function isAuthenticated(req, res, next) {
         if (req.isAuthenticated()) {
             next();

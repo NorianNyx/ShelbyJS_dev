@@ -1,0 +1,27 @@
+<% stylesheet('/modules/blog/css/blog.css') %>
+<div class="container">
+    <h3>Blog</h3>
+    <hr />
+    <% if (isInRole(userRoles, 'Administrator')) { %>
+        <button class="btn btn-primary btn-lg pull-right" id="addPost_btn" onclick="$.fancybox('#addPost', { closeBtn: false });">Add Post</button>
+    <% } %>
+    <div class="container" id="blogArea">
+    </div>
+</div>
+<% if (isInRole(userRoles, 'Administrator')) { %>
+    <div id="addPost" style="display: none; min-width: 600px; max-width: 600px;">
+        <h3>Add Post</h3>
+        <hr />
+        <div class="form-group">
+            <input type="text" placeholder="Enter Title" class="form-control" name="title" id="addPost_title">
+        </div>
+        <textarea name="ckeditor" id="ckeditor" rows="15" cols="95">
+        </textarea>
+        <hr />
+        <input type="button" class="btn btn-primary" value="Submit" id="addPost_submitBtn">
+        <input type="reset" class="btn btn-secondary" value="Cancel" onclick="$.fancybox.close();" id="addPost_cancelBtn" />
+    </div>
+<% } %>
+<% script('/bower_components/ckeditor/ckeditor.js') %>
+<% script('/bower_components/ckeditor/adapters/jquery.js') %>
+<% script('/modules/blog/js/blog.js') %>

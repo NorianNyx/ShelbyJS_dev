@@ -4,6 +4,7 @@
         <title><%= siteInfo.sitename %></title>
         <link href="/bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
         <link href="/bower_components/fancybox/source/jquery.fancybox.css" rel="stylesheet" />
+        <link href="/shelby/css/shelby.css" rel="stylesheet" />
         <%- stylesheets %>
     </head>
     <body>
@@ -13,6 +14,7 @@
         <% include ../includes/header.ejs %>
         <%- body -%>
         <% include ../includes/footer.ejs %>
+        <div class="loader"></div>
         <script src="/bower_components/jquery/dist/jquery.min.js"></script>
         <script src="/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
         <script src="/bower_components/fancybox/source/jquery.fancybox.js"></script>

@@ -1,14 +1,14 @@
-<div style="display:none; padding: 10px; padding-top: 0px; width: 300px;" id="createPageForm">
-    <h3>Create Page</h3>
+<div style="display:none; padding: 10px; padding-top: 0px; width: 300px;" id="createViewForm">
+    <h3>Create View</h3>
     <hr />
     <form action="/shelby/createView" method="post">
         <div class="form-group">
             <label class="control-label sr-only"></label>
-            <input type="text" placeholder="Page Name" class="form-control" name="pagename" id="createPageForm_pagename">
+            <input type="text" placeholder="View Name" class="form-control" name="viewname" id="createViewForm_viewname">
             <span class="glyphicon form-control-feedback" style="display: none;"></span>
         </div>
         <hr />
-        <button type="submit" class="btn btn-primary" id="createPageForm_submitBtn">Submit</button>
-        <input type="reset" class="btn btn-secondary" value="Cancel" onclick="$.fancybox.close();" id="createPageForm_cancelBtn" />
+        <button type="submit" class="btn btn-primary" id="createViewForm_submitBtn">Submit</button>
+        <input type="reset" class="btn btn-secondary" value="Cancel" onclick="$.fancybox.close();" id="createViewForm_cancelBtn" />
     </form>
 </div>

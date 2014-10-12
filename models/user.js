@@ -71,7 +71,7 @@ userSchema.statics.addRoleByName = function (username, roleName, callback) {
                 if (err) {
                     return callback(err);
                 } else {
-                    if (role != null) {
+                    if (role !== null) {
                         if (user.Local.Roles.indexOf(role.RoleID) === -1) {
                             user.Local.Roles.push(role.RoleID);
                             user.save();
@@ -82,6 +82,27 @@ userSchema.statics.addRoleByName = function (username, roleName, callback) {
                     }
                 }
             });
+        }
+    });
+};
+
+userSchema.statics.getUsersByRoleName = function (roleName, callback) {
+    var schema = this;
+    Role.getRoleByName(roleName, function (err, role) {
+        if (err) {
+            return callback(err);
+        } else {
+            if (role !== null) {
+                schema.find({ 'Local.Roles': role.RoleID }, function (err, users) {
+                    if (err) {
+                        return callback(err);
+                    } else {
+                        return callback(null, users);
+                    }
+                });
+            } else {
+                return callback(null, []);
+            }
         }
     });
 };

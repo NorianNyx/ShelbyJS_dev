@@ -1,0 +1,9 @@
+.admin-icon {
+    text-align: center;
+    display: inline-block;
+    margin: 10px 40px;
+}
+
+.admin-icon span {
+    font-size: 30px;
+}

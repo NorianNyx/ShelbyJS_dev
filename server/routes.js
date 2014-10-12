@@ -2,7 +2,6 @@ var gravatar = require('gravatar');
 var fs       = require('fs');
 var siteInfo = require('../config/site.json');
 var User     = require('../models/user.js');
-var path     = require('path');
 
 module.exports = function (app, passport) {
     app.get('/', function (req, res) {
@@ -13,8 +12,24 @@ module.exports = function (app, passport) {
         }
     });
     
+    app.get('/about', function (req, res) {
+        if (req.isAuthenticated()) {
+            getUserRoles(req, res, 'about');
+        } else {
+            renderPage(req, res, [], 'about');
+        }
+    });
+    
     app.get('/profile', isAuthenticated, function (req, res) {
         getUserRoles(req, res, 'profile');
+    });
+    
+    app.get('/adminpanel', isAdmin, function (req, res) {
+        getUserRoles(req, res, 'adminpanel');
+    });
+    
+    app.get('/manageroles', isAdmin, function (req, res) {
+        getUserRoles(req, res, 'manageroles');
     });
     
     app.get('/editusers', isAdmin, function (req, res) {
@@ -27,31 +42,31 @@ module.exports = function (app, passport) {
     });
     
     app.get('/:view', function (req, res) {
-        fs.exists('../views/' + req.params.view + '.ejs', function (exists) {
-            if (exists) {
-                if (req.isAuthenticated()) {
+        if (req.isAuthenticated()) {
+            fs.exists('../views/' + req.params.view + '.ejs', function (exists) {
+                if (exists) {
                     getUserRoles(req, res, req.params.view);
                 } else {
-                    renderPage(req, res, [], req.params.view);
+                    renderPage(req, res, [], '404');
                 }
-            } else {
-                renderPage(req, res, [], '404');
-            }
-        });
+            }); 
+        } else {
+            renderPage(req, res, [], '404');
+        }
     });
     
     app.get('/*', function (req, res) {
-        fs.exists('../views/' + req.params.view + '.ejs', function (exists) {
-            if (exists) {
-                if (req.isAuthenticated()) {
-                    getUserRoles(req, res, req.params.view);
+        if (req.isAuthenticated()) {
+            fs.exists('../views/' + req.url.split('/')[1] + '.ejs', function (exists) {
+                if (exists) {
+                    getUserRoles(req, res, req.url.split('/')[1]);
                 } else {
-                    renderPage(req, res, [], req.params.view);
+                    renderPage(req, res, [], '404');
                 }
-            } else {
-                renderPage(req, res, [], '404');
-            }
-        });
+            }); 
+        } else {
+            renderPage(req, res, [], '404');
+        }
     });
     
     app.post('/login', passport.authenticate('local-login', {

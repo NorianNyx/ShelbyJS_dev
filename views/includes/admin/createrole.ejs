@@ -1,0 +1,14 @@
+<div style="display:none; padding: 10px; padding-top: 0px; width: 300px;" id="createRoleForm">
+    <h3>Create Role</h3>
+    <hr />
+    <form action="/shelby/createRole" method="post">
+        <div class="form-group">
+            <label class="control-label sr-only"></label>
+            <input type="text" placeholder="Role Name" class="form-control" name="rolename" id="createRoleForm_rolename">
+            <span class="glyphicon form-control-feedback" style="display: none;"></span>
+        </div>
+        <hr />
+        <button type="submit" class="btn btn-primary" id="createRoleForm_submitBtn">Submit</button>
+        <input type="reset" class="btn btn-secondary" value="Cancel" onclick="$.fancybox.close();" id="createRoleForm_cancelBtn" />
+    </form>
+</div>

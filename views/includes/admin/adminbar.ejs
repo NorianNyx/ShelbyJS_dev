@@ -8,14 +8,14 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="#">Admin</a>
+            <a class="navbar-brand" href="/adminpanel">Admin</a>
         </div>
         <div class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">Views <span class="caret"></span></a>
                     <ul class="dropdown-menu" role="menu">
-                        <li><a href="#" onclick="$.fancybox('#createPageForm', { closeBtn: false }); return false;">Create View</a></li>
+                        <li><a href="#" onclick="$.fancybox('#createViewForm', { closeBtn: false }); return false;">Create View</a></li>
                     </ul>
                 </li>
                 <li class="dropdown">
@@ -24,8 +24,16 @@
                         <li><a href="/editusers">Edit Users</a></li>
                     </ul>
                 </li>
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Roles <span class="caret"></span></a>
+                    <ul class="dropdown-menu" role="menu">
+                        <li><a href="#" onclick="$.fancybox('#createRoleForm', { closeBtn: false }); return false;">Create Role</a></li>
+                        <li><a href="/manageroles">Manage Roles</a></li>
+                    </ul>
+                </li>
             </ul>
         </div><!--/.navbar-collapse -->
     </div>
 </div>
 <% include /createview.ejs %>
+<% include /createrole.ejs %>

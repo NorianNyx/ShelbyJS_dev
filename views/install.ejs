@@ -1,0 +1,48 @@
+<html>
+    <head>
+        <title>Install ShelbyJS</title>
+        <link href="/bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
+    </head>
+    <body>
+        <div class="container">
+            <h3>Install ShelbyJS</h3>
+            <hr />
+            <div class="row" style="padding: 10px 20%;">
+                <form action="/install" method="post">
+                    <div class="form-group">
+                        <input type="text" placeholder="Site Name" class="form-control" name="sitename" id="installForm_sitename">
+                    </div>
+                    <div class="form-group">
+                        <input type="text" placeholder="Username" class="form-control" name="username" id="installForm_username">
+                    </div>
+                    <div class="form-group has-feedback">
+                        <label class="control-label sr-only"></label>
+                        <input type="text" placeholder="Email" class="form-control" name="email" id="installForm_email">
+                        <span class="glyphicon form-control-feedback" style="display: none;"></span>
+                    </div>
+                    <div class="form-group has-feedback">
+                        <label class="control-label sr-only"></label>
+                        <input type="password" placeholder="Password" class="form-control" name="password" id="installForm_password">
+                        <span class="glyphicon form-control-feedback" style="display: none;"></span>
+                    </div>
+                    <div class="form-group has-feedback">
+                        <label class="control-label sr-only"></label>
+                        <input type="password" placeholder="Confirm Password" class="form-control" name="cofirmpassword" id="installForm_confirmPassword">
+                        <span class="glyphicon form-control-feedback" style="display: none;"></span>
+                    </div>
+                    <div class="form-group">
+                        <input type="text" placeholder="Database Url" class="form-control" name="databaseurl" id="installForm_databaseurl">
+                    </div>
+                    <div class="form-group">
+                        <input type="text" placeholder="Copyright Info" class="form-control" name="copyright" id="installForm_copyrightinfo">
+                    </div>
+                    <hr />
+                    <input type="submit" class="btn btn-primary" value="Install" id="signupForm_submitBtn">
+                </form>
+            </div>
+        </div>
+        <script src="/bower_components/jquery/dist/jquery.min.js"></script>
+        <script src="/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+        <script src="/shelby/js/install.js"></script>
+    </body>
+</html>

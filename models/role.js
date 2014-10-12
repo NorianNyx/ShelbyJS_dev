@@ -57,6 +57,16 @@ roleSchema.statics.getRoleByName = function (roleName, callback) {
     });
 };
 
+roleSchema.statics.getAllRoles = function (callback) {
+    this.find({}, function (err, roles) {
+        if (err) {
+            return callback(err);
+        } else {
+            return callback(null, roles);
+        }
+    })
+};
+
 roleSchema.plugin(autoIncrement.plugin, { model: 'Role', field: 'RoleID', startAt: 1 });
 
 module.exports = mongoose.model('Role', roleSchema);

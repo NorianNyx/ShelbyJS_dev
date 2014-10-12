@@ -38,13 +38,15 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 //setup helper functions for ejs
+require('../install/install.js')(app);
 require('../server/helpers.js')(app);
 
-//define api web service
-require('../server/shelby.js')(app, passport);
+//define api web services
+require('../server/api/shelby.js')(app);
+require('../server/api/blog.js')(app);
 
 //define routes
-require('../server/customroutes.js')(app, passport);
+require('../server/customroutes.js')(app);
 require('../server/routes.js')(app, passport);
 
 //start server
