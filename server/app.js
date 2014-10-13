@@ -18,9 +18,7 @@ var engine        = require('ejs-locals');
 //configure app
 app.engine('ejs', engine);
 app.set('view engine', 'ejs');
-
-require('multi-views').setupMultiViews(app);
-app.set('views', ['../views/admin', '../views']);
+app.set('views', '../views');
 
 mongoose.connect(configDB);
 require('../config/passport.js')(passport);

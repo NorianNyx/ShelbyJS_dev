@@ -25,15 +25,15 @@ module.exports = function (app, passport) {
     });
     
     app.get('/adminpanel', isAdmin, function (req, res) {
-        getUserRoles(req, res, 'adminpanel');
+        getUserRoles(req, res, 'admin/adminpanel');
     });
     
     app.get('/manageroles', isAdmin, function (req, res) {
-        getUserRoles(req, res, 'manageroles');
+        getUserRoles(req, res, 'admin/manageroles');
     });
     
     app.get('/editusers', isAdmin, function (req, res) {
-        getUserRoles(req, res, 'editusers');
+        getUserRoles(req, res, 'admin/editusers');
     });
     
     app.get('/logout', function (req, res) {
