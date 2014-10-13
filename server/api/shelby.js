@@ -165,6 +165,16 @@ module.exports = function (app) {
         });
     });
     
+    app.post('/shelby/removeUserFromRole', isAdmin, function (req, res) {
+        User.removeUserFromRole(req.body.username, req.body.rolename, function (err, status) {
+            if (err) {
+                res.send(err);
+            } else {
+                res.status(status).end();
+            }
+        });
+    });
+    
     function isAuthenticated(req, res, next) {
         if (req.isAuthenticated()) {
             next();

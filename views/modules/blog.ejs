@@ -3,7 +3,7 @@
     <h3>Blog</h3>
     <hr />
     <% if (isInRole(userRoles, 'Administrator')) { %>
-        <button class="btn btn-primary btn-lg pull-right" id="addPost_btn" onclick="$.fancybox('#addPost', { closeBtn: false });">Add Post</button>
+        <button class="btn btn-primary btn-lg pull-right" id="addPost_btn" onclick="$.fancybox('#addPost', { closeBtn: false, helpers: { overlay: { closeClick: false } } });">Add Post</button>
     <% } %>
     <div class="container" id="blogArea">
     </div>

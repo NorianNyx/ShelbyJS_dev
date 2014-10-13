@@ -67,21 +67,25 @@ userSchema.statics.addRoleByName = function (username, roleName, callback) {
         if (err) {
             return callback(err);
         } else {
-            Role.getRoleByName(roleName, function (err, role) {
-                if (err) {
-                    return callback(err);
-                } else {
-                    if (role !== null) {
-                        if (user.Local.Roles.indexOf(role.RoleID) === -1) {
-                            user.Local.Roles.push(role.RoleID);
-                            user.save();
-                        }
-                        return callback(null, 201);
+            if (user != null) {
+                Role.getRoleByName(roleName, function (err, role) {
+                    if (err) {
+                        return callback(err);
                     } else {
-                        return callback(null, 404);
+                        if (role !== null) {
+                            if (user.Local.Roles.indexOf(role.RoleID) === -1) {
+                                user.Local.Roles.push(role.RoleID);
+                                user.save();
+                            }
+                            return callback(null, 201);
+                        } else {
+                            return callback(null, 404);
+                        }
                     }
-                }
-            });
+                });
+            } else {
+                return callback(null, 404);
+            }
         }
     });
 };
@@ -112,13 +116,17 @@ userSchema.statics.getUserRolesByUsername = function (username, callback) {
         if (err) {
             return callback(err);
         } else {
-            Role.getRolesByID(user.Local.Roles, function (err, roles) {
-                if (err) {
-                    return callback(err);
-                } else {
-                    return callback(null, roles);
-                }
-            });
+            if (user !== null) {
+                Role.getRolesByID(user.Local.Roles, function (err, roles) {
+                    if (err) {
+                        return callback(err);
+                    } else {
+                        return callback(null, roles);
+                    }
+                });
+            } else {
+                return callback(null, []);
+            }
         }
     });
 };
@@ -128,19 +136,54 @@ userSchema.statics.isInRole = function (username, roleName, callback) {
         if (err) {
             return callback(err);
         } else {
-            Role.getRolesByID(user.Local.Roles, function (err, roles) {
-                if (err) {
-                    return callback(err);
-                } else {
-                    var inRole = false;
-                    roles.forEach(function (role, index) {
-                        if (role.RoleName === roleName) {
-                            inRole = true;
+            if (user !== null) {
+                Role.getRolesByID(user.Local.Roles, function (err, roles) {
+                    if (err) {
+                        return callback(err);
+                    } else {
+                        var inRole = false;
+                        roles.forEach(function (role, index) {
+                            if (role.RoleName === roleName) {
+                                inRole = true;
+                            }
+                        });
+                        return callback(null, inRole);
+                    }
+                });
+            } else {
+                return callback(null, false);
+            }
+        }
+    });
+};
+
+userSchema.statics.removeUserFromRole = function (username, roleName, callback) {
+    this.getByUsername(username, function (err, user) {
+        if (err) {
+            return callback(err);
+        } else {
+            if (user !== null) {
+                Role.getRoleByName(roleName, function (err, role) {
+                    if (err) {
+                        return callback(err);
+                    } else {
+                        if (user.Local.Roles.indexOf(role.RoleID) > -1) {
+                            user.Local.Roles.splice(user.Local.Roles.indexOf(role.RoleID), 1);
+                            user.save(function (err) {
+                                if (err) {
+                                    return callback(err);
+                                } else {
+                                    return callback(null, 200);
+                                }
+                            });
+                        } else {
+                            return callback(null, 404);
                         }
-                    });
-                    return callback(null, inRole);
-                }
-            });
+                    }
+                });
+            } else {
+                return callback(null, 404);
+            }
         }
     });
 };

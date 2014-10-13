@@ -15,7 +15,7 @@ var editUsers = {
                     { title: 'Firstname', data: 'FirstName' },
                     { title: 'Lastname', data: 'LastName' },
                     { title: 'Email', data: 'Email' },
-                    { title: 'Delete', data: 'Delete', width: '45px' }
+                    { title: '', data: 'Delete', width: '15px' }
                 ],
                 data: editUsers.getDataTablesData(users)
             });
@@ -27,7 +27,7 @@ var editUsers = {
         var data = [];
         $.each(users, function (i, user) {
             var obj = {};
-            obj.Delete = '<a href="#" onclick="editUsers.confirmDeleteUser(\'' + user.Username + '\'); return false;">Delete<span class="glyphicon glyphicon-remove" style="margin-left: 10px; color: #c9302c;"></span></a>';
+            obj.Delete = '<a href="#" onclick="editUsers.confirmDeleteUser(\'' + user.Username + '\'); return false;"><span class="glyphicon glyphicon-remove" style="margin-left: 10px; color: #c9302c;"></span></a>';
             $.each(Object.keys(user), function (i, key) {
                 obj[key] = user[key];
             });
