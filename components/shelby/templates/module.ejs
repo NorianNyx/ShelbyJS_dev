@@ -1,0 +1,9 @@
+<% stylesheet('/modules/xx/css/xx.css') %>
+<div class="container">
+    <h3>Hello World</h3>
+    <hr />
+    <% if (isInRole(userRoles, 'Administrator')) { %>
+        <button class="btn btn-primary btn-lg">Hello World</button>
+    <% } %>
+</div>
+<% script('/modules/xx/js/xx.js') %>

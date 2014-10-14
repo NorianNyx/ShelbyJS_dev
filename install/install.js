@@ -1,7 +1,8 @@
 var siteInfo = require('../config/site.json');
 var fs       = require('fs');
-var User     = require('../models/user.js');
-var Role     = require('../models/role.js');
+var User     = require('../models/shelby/user.js');
+var Role     = require('../models/shelby/role.js');
+var mongoose = require('mongoose');
 
 module.exports = function (app) {
     app.get('/install', function (req, res) {
@@ -27,6 +28,8 @@ module.exports = function (app) {
             if (err) {
                 res.send(err);
             } else {
+                mongoose.connection.close();
+                mongoose.connect(req.body.databaseurl);
                 var newRole = new Role();
                 newRole.RoleName = 'Administrator';
                 newRole.save(function (err, role) {

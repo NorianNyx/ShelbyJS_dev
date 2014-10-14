@@ -1,6 +1,6 @@
-var User = require('../../models/user.js');
-var Role = require('../../models/role.js');
-var fs   = require('fs');
+var User     = require('../../models/shelby/user.js');
+var Role     = require('../../models/shelby/role.js');
+var fs       = require('fs');
 
 module.exports = function (app) {
     app.get('/shelby/checkUsername', function (req, res) {
@@ -174,6 +174,115 @@ module.exports = function (app) {
             }
         });
     });
+    
+    app.post('/shelby/createModule', isAdmin, function (req, res) {
+        var moduleName = req.body.modulename.toLowerCase();
+        fs.exists('../views/modules/' + moduleName + '.ejs', function (exists) {
+            if (!exists) {
+                createModuleView(res, moduleName);
+            } else {
+                res.status(304).end();
+            }
+        });
+    });
+    
+    function createModuleView(res, moduleName) {
+        fs.readFile('../components/shelby/templates/module.ejs', 'utf-8', function (err, data) {
+            if (err) {
+                res.send(err);
+            } else {
+                data = data.replace(new RegExp('xx', 'g'), moduleName);
+                fs.writeFile('../views/modules/' + moduleName + '.ejs', data, 'utf-8', function (err) {
+                    if (err) {
+                        res.send(err);
+                    } else {
+                        createComponents(res, moduleName);
+                    }
+                });
+            }
+        });
+    }
+    
+    function createComponents(res, moduleName) {
+        fs.mkdir('../components/modules/' + moduleName, null, function (err) {
+            if (err) {
+                res.send(err);
+            } else {
+                fs.mkdir('../components/modules/' + moduleName + '/js', null, function (err) {
+                    if (err) {
+                        res.send(err);
+                    } else {
+                        fs.mkdir('../components/modules/' + moduleName + '/css', null, function (err) {
+                            if (err) {
+                                res.send(err);
+                            } else {
+                                var rs1 = fs.createReadStream('../components/shelby/templates/script.js');
+                                var rs2 = fs.createReadStream('../components/shelby/templates/stylesheet.css');
+                                var ws1 = fs.createWriteStream('../components/modules/' + moduleName + '/js/' + moduleName + '.js');
+                                var ws2 = fs.createWriteStream('../components/modules/' + moduleName + '/css/' + moduleName + '.css');
+                                rs1.on('error', function (err) {
+                                    res.send(err);
+                                });
+                                rs2.on('error', function (err) {
+                                    res.send(err);
+                                });
+                                ws1.on('error', function (err) {
+                                    res.send(err);
+                                });
+                                ws2.on('error', function (err) {
+                                    res.send(err);
+                                });
+                                rs1.pipe(ws1);
+                                rs2.pipe(ws2);
+                                createApi(res, moduleName);
+                            }
+                        })
+                    }
+                })
+            }
+        })
+    }
+    
+    function createApi(res, moduleName) {
+        fs.readFile('../components/shelby/templates/api.js', 'utf-8', function (err, data) {
+            if (err) {
+                res.send(err);
+            } else {
+                data = data.replace(new RegExp('xx', 'g'), moduleName);
+                fs.writeFile('../server/api/' + moduleName + '.js', data, 'utf-8', function (err) {
+                    if (err) {
+                        res.send(err);
+                    } else {
+                        createModel(res, moduleName);
+                    }
+                });
+            }
+        });
+    }
+    
+    function createModel(res, moduleName) {
+        fs.readFile('../components/shelby/templates/model.js', 'utf-8', function (err, data) {
+            if (err) {
+                res.send(err);
+            } else {
+                data = data.replace(new RegExp('xx', 'g'), moduleName);
+                data = data.replace(new RegExp('XX', 'g'), moduleName.charAt(0).toUpperCase() + moduleName.slice(1));
+                fs.mkdir('../models/' + moduleName, null, function (err) {
+                    if (err) {
+                        res.send(err);
+                    } else {
+                        fs.writeFile('../models/' + moduleName + '/' + moduleName + '.js', data, 'utf-8', function (err) {
+                            if (err) {
+                                res.send(err);
+                            } else {
+                                res.redirect(res.req.headers.referer);
+                            }
+                        });
+                    }
+                });
+            }
+        });
+    }
     
     function isAuthenticated(req, res, next) {
         if (req.isAuthenticated()) {

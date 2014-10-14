@@ -1,5 +1,5 @@
 var passportLocal = require('passport-local').Strategy;
-var User          = require('../models/user');
+var User          = require('../models/shelby/user.js');
 
 module.exports = function (passport) {
     passport.use('local-signup', new passportLocal({

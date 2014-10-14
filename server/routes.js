@@ -1,7 +1,7 @@
 var gravatar = require('gravatar');
 var fs       = require('fs');
 var siteInfo = require('../config/site.json');
-var User     = require('../models/user.js');
+var User     = require('../models/shelby/user.js');
 
 module.exports = function (app, passport) {
     app.get('/', function (req, res) {
@@ -49,7 +49,7 @@ module.exports = function (app, passport) {
                 } else {
                     renderPage(req, res, [], '404');
                 }
-            }); 
+            });
         } else {
             renderPage(req, res, [], '404');
         }
@@ -122,7 +122,7 @@ module.exports = function (app, passport) {
         res.render(page, {
             isAuthenticated: req.isAuthenticated(),
             user: req.user,
-            message : req.flash('loginMessage') + req.flash('signupMessage'),
+            message : req.flash('loginMessage') + req.flash('signupMessage') + req.flash('passwordInvalid'),
             siteInfo : siteInfo,
             gravatarUrl: req.isAuthenticated() ? gravatar.url(req.user.Local.Email, { s: '200', r: 'pg' }, true) : '',
             userRoles: roles

@@ -1,0 +1,14 @@
+<div style="display:none; padding: 10px; padding-top: 0px; width: 300px;" id="createModuleForm">
+    <h3>Create Module</h3>
+    <hr />
+    <form action="/shelby/createModule" method="post">
+        <div class="form-group">
+            <label class="control-label sr-only"></label>
+            <input type="text" placeholder="Module Name" class="form-control" name="modulename" id="createModuleForm_modulename">
+            <span class="glyphicon form-control-feedback" style="display: none;"></span>
+        </div>
+        <hr />
+        <button type="submit" class="btn btn-primary" id="createModuleForm_submitBtn">Submit</button>
+        <input type="reset" class="btn btn-secondary" value="Cancel" onclick="$.fancybox.close();" id="createModuleForm_cancelBtn" />
+    </form>
+</div>

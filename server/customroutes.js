@@ -1,6 +1,6 @@
 var gravatar = require('gravatar');
 var siteInfo = require('../config/site.json');
-var User     = require('../models/user.js');
+var User     = require('../models/shelby/user.js');
 
 module.exports = function (app) {
     function isAuthenticated(req, res, next) {

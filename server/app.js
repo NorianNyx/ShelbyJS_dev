@@ -15,6 +15,7 @@ var mongoose      = require('mongoose');
 var configDB      = require('../config/site.json').database.url;
 var engine        = require('ejs-locals');
 
+//mongodb://nyx:6676Mar93@ds039000.mongolab.com:39000/nyx
 //configure app
 app.engine('ejs', engine);
 app.set('view engine', 'ejs');

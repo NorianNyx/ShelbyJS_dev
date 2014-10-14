@@ -1,5 +1,5 @@
-var Post = require('../../models/post.js');
-var User = require('../../models/user.js');
+var Post = require('../../models/blog/post.js');
+var User = require('../../models/shelby/user.js');
 
 module.exports = function (app) {
     app.get('/blog/getPosts', isAuthenticated, function (req, res) {
