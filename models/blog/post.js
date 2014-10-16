@@ -26,6 +26,16 @@ postSchema.statics.addPost = function (title, content, username, callback) {
     });
 };
 
+postSchema.statics.getPost = function (postId, callback) {
+    this.findOne({ 'PostID' : postId }, function (err, post) {
+        if (err) {
+            return callback(err);
+        } else {
+            return callback(null, post);
+        }
+    });
+};
+
 postSchema.statics.getAllPosts = function (callback) {
    this.find({}, function (err, posts) {
        if (err) {

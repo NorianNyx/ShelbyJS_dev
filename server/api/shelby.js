@@ -1,8 +1,10 @@
-var User     = require('../../models/shelby/user.js');
-var Role     = require('../../models/shelby/role.js');
-var fs       = require('fs');
+var User            = require('../../models/shelby/user.js');
+var Role            = require('../../models/shelby/role.js');
+var isAuthenticated = require('../helpers.js').isAuthenticated;
+var fs              = require('fs');
 
 module.exports = function (app) {
+    //check to see if this username is taken
     app.get('/shelby/checkUsername', function (req, res) {
         User.getByUsername(req.query.username, function (err, user) {
             if (err) {
@@ -16,6 +18,18 @@ module.exports = function (app) {
         });
     });
     
+    //get the requested user
+    app.get('/shelby/getUser', isAdmin, function (req, res) {
+        User.getByUsername(req.query.username, function (err, user) {
+            if (err) {
+                res.send(err);
+            } else {
+                res.send(user);
+            }
+        });
+    });
+    
+    //get all users from the DB
     app.get('/shelby/getAllUsers', isAdmin, function (req, res) {
         User.getAllUsers(function (err, users) {
             if (err) {
@@ -26,6 +40,7 @@ module.exports = function (app) {
         });
     });
     
+    //get all users from the DB and filter the data
     app.get('/shelby/getAllUserInfos', isAdmin, function (req, res) {
         User.getAllUsers(function (err, users) {
             if (err) {
@@ -45,6 +60,7 @@ module.exports = function (app) {
         });
     });
     
+    //get all roles from the DB and filter the data
     app.get('/shelby/getAllRoleInfos', isAdmin, function (req, res) {
         Role.getAllRoles(function (err, roles) {
             if (err) {
@@ -61,6 +77,7 @@ module.exports = function (app) {
         });
     });
     
+    //get all users in a specified role
     app.get('/shelby/getUsersByRoleName', isAdmin, function (req, res) {
         User.getUsersByRoleName(req.query.rolename, function (err, users) {
             if (err) {
@@ -80,6 +97,7 @@ module.exports = function (app) {
         });
     });
     
+    //add user to specified role
     app.post('/shelby/addUserToRole', isAdmin, function (req, res) {
         User.addRoleByName(req.body.username, req.body.rolename, function (err, status) {
             if (err) {
@@ -90,6 +108,7 @@ module.exports = function (app) {
         });
     });
     
+    //create a role
     app.post('/shelby/createRole', isAdmin, function (req, res) {
         Role.addRole(req.body.rolename, function (err, status) {
             if (err) {
@@ -100,11 +119,12 @@ module.exports = function (app) {
         });
     });
     
+    //create a main view in the /views folder
     app.post('/shelby/createView', isAdmin, function (req, res) {
-        fs.exists('../views/' + req.body.viewname.toLowerCase() + '.ejs', function (exists) {
+        fs.exists('../views/controllers/' + req.body.viewname.toLowerCase() + '.ejs', function (exists) {
             if (!exists) {
                 var rs = fs.createReadStream('../components/shelby/templates/view.ejs');
-                var ws = fs.createWriteStream('../views/' + req.body.viewname.toLowerCase() + '.ejs');
+                var ws = fs.createWriteStream('../views/controllers/' + req.body.viewname.toLowerCase() + '.ejs');
                 rs.on('error', function (err) {
                     res.send(err);
                 });
@@ -117,6 +137,7 @@ module.exports = function (app) {
         });
     });
     
+    //update the user's profile information (should update to PUT in future revision)
     app.post('/shelby/updateProfile', isAuthenticated, function (req, res) {
         User.getByUsername(req.user.Local.Username, function (err, user) {
             if (err) {
@@ -137,6 +158,7 @@ module.exports = function (app) {
         });
     });
     
+    //update the user's password (should update to PUT in future revision)
     app.post('/shelby/updatePassword', isAuthenticated, function(req, res) {
         User.getByUsername(req.user.Local.Username, function (err, user) {
             if (err) {
@@ -154,6 +176,7 @@ module.exports = function (app) {
         });
     });
     
+    //delete the specified user (should be updated to DELETE in future revision)
     app.post('/shelby/deleteUser', isAdmin, function (req, res) {
         User.getByUsername(req.body.username, function (err, user) {
             if (err) {
@@ -165,6 +188,7 @@ module.exports = function (app) {
         });
     });
     
+    //remove a user from a role (should probably be a put, kind of ambiguous)
     app.post('/shelby/removeUserFromRole', isAdmin, function (req, res) {
         User.removeUserFromRole(req.body.username, req.body.rolename, function (err, status) {
             if (err) {
@@ -175,6 +199,7 @@ module.exports = function (app) {
         });
     });
     
+    //start the process of creating a module
     app.post('/shelby/createModule', isAdmin, function (req, res) {
         var moduleName = req.body.modulename.toLowerCase();
         fs.exists('../views/modules/' + moduleName + '.ejs', function (exists) {
@@ -186,63 +211,66 @@ module.exports = function (app) {
         });
     });
     
+    //create the main module view file inside of /views/modules
     function createModuleView(res, moduleName) {
         fs.readFile('../components/shelby/templates/module.ejs', 'utf-8', function (err, data) {
             if (err) {
                 res.send(err);
             } else {
                 data = data.replace(new RegExp('xx', 'g'), moduleName);
-                fs.writeFile('../views/modules/' + moduleName + '.ejs', data, 'utf-8', function (err) {
+                fs.mkdir('../views/modules/' + moduleName, null, function (err) {
                     if (err) {
                         res.send(err);
                     } else {
-                        createComponents(res, moduleName);
+                        fs.writeFile('../views/modules/' + moduleName + '/' + moduleName + '.ejs', data, 'utf-8', function (err) {
+                            if (err) {
+                                res.send(err);
+                            } else {
+                                createComponents(res, moduleName);
+                            }
+                        });
                     }
                 });
             }
         });
     }
     
+    //create the component folders/files in /components/modules/<moduleName>
     function createComponents(res, moduleName) {
-        fs.mkdir('../components/modules/' + moduleName, null, function (err) {
+        fs.mkdir('../views/modules/' + moduleName + '/js', null, function (err) {
             if (err) {
                 res.send(err);
             } else {
-                fs.mkdir('../components/modules/' + moduleName + '/js', null, function (err) {
+                fs.mkdir('../views/modules/' + moduleName + '/css', null, function (err) {
                     if (err) {
                         res.send(err);
                     } else {
-                        fs.mkdir('../components/modules/' + moduleName + '/css', null, function (err) {
-                            if (err) {
-                                res.send(err);
-                            } else {
-                                var rs1 = fs.createReadStream('../components/shelby/templates/script.js');
-                                var rs2 = fs.createReadStream('../components/shelby/templates/stylesheet.css');
-                                var ws1 = fs.createWriteStream('../components/modules/' + moduleName + '/js/' + moduleName + '.js');
-                                var ws2 = fs.createWriteStream('../components/modules/' + moduleName + '/css/' + moduleName + '.css');
-                                rs1.on('error', function (err) {
-                                    res.send(err);
-                                });
-                                rs2.on('error', function (err) {
-                                    res.send(err);
-                                });
-                                ws1.on('error', function (err) {
-                                    res.send(err);
-                                });
-                                ws2.on('error', function (err) {
-                                    res.send(err);
-                                });
-                                rs1.pipe(ws1);
-                                rs2.pipe(ws2);
-                                createApi(res, moduleName);
-                            }
-                        })
+                        var rs1 = fs.createReadStream('../components/shelby/templates/script.js');
+                        var rs2 = fs.createReadStream('../components/shelby/templates/stylesheet.css');
+                        var ws1 = fs.createWriteStream('../views/modules/' + moduleName + '/js/' + moduleName + '.js');
+                        var ws2 = fs.createWriteStream('../views/modules/' + moduleName + '/css/' + moduleName + '.css');
+                        rs1.on('error', function (err) {
+                            res.send(err);
+                        });
+                        rs2.on('error', function (err) {
+                            res.send(err);
+                        });
+                        ws1.on('error', function (err) {
+                            res.send(err);
+                        });
+                        ws2.on('error', function (err) {
+                            res.send(err);
+                        });
+                        rs1.pipe(ws1);
+                        rs2.pipe(ws2);
+                        createApi(res, moduleName);
                     }
-                })
+                });
             }
-        })
+        });
     }
     
+    //create the api file inside of the /server/api folder
     function createApi(res, moduleName) {
         fs.readFile('../components/shelby/templates/api.js', 'utf-8', function (err, data) {
             if (err) {
@@ -260,6 +288,7 @@ module.exports = function (app) {
         });
     }
     
+    //create a model file inside of /models/<moduleName>
     function createModel(res, moduleName) {
         fs.readFile('../components/shelby/templates/model.js', 'utf-8', function (err, data) {
             if (err) {
@@ -284,15 +313,7 @@ module.exports = function (app) {
         });
     }
     
-    function isAuthenticated(req, res, next) {
-        if (req.isAuthenticated()) {
-            next();
-        } else {
-            req.flash('loginMessage', 'You must be logged in to do that.');
-            res.redirect('/');
-        }
-    }
-    
+    //make sure this user is an admin, and return a 401 if not
     function isAdmin(req, res, next) {
         if (req.isAuthenticated()) {
             User.isInRole(req.user.Local.Username, 'Administrator', function (err, isInRole) {

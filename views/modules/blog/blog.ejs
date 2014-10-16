@@ -1,0 +1,40 @@
+<% stylesheet('/views/modules/blog/css/blog.css') %>
+<div class="container">
+    <h3>Blog</h3>
+    <hr />
+    <% if (isInRole('Administrator')) { %>
+        <button class="btn btn-primary btn-lg pull-right" id="addPost_btn" onclick="$.fancybox('#addPost', { closeBtn: false, helpers: { overlay: { closeClick: false } } });">Add Post</button>
+    <% } %>
+    <div class="container" id="blogArea">
+    </div>
+</div>
+<% if (isInRole('Administrator')) { %>
+    <div id="addPost" style="display: none; min-width: 600px; max-width: 600px;">
+        <h3>Add Post</h3>
+        <hr />
+        <div class="form-group has-feedback">
+            <label class="control-label sr-only"></label>
+            <input type="text" placeholder="Enter Title" class="form-control" name="title" id="addPost_title">
+            <span class="glyphicon form-control-feedback" style="display: none;"></span>
+        </div>
+        <textarea name="ckeditor_addPost" id="ckeditor_addPost" rows="15" cols="95">
+        </textarea>
+        <hr />
+        <input type="button" class="btn btn-primary" value="Submit" id="addPost_submitBtn">
+        <input type="reset" class="btn btn-secondary" value="Cancel" onclick="$.fancybox.close();" id="addPost_cancelBtn" />
+    </div>
+    <div id="editPost" style="display: none; min-width: 600px; max-width: 600px;">
+        <h3><span id="editPost_title"></span><small> - Editing</small></h3>
+        <hr />
+        <textarea name="ckeditor_editPost" id="ckeditor_editPost" rows="15" cols="95">
+        </textarea>
+        <hr />
+        <input type="button" class="btn btn-primary" value="Submit" id="editPost_submitBtn">
+        <input type="reset" class="btn btn-secondary" value="Cancel" onclick="$.fancybox.close();" id="editPost_cancelBtn" />
+        <input type="button" class="btn btn-danger pull-right" value="Delete" id="editPost_deleteBtn" />
+    </div>
+    <span class="glyphicon glyphicon-pencil pull-right blog-post-edit-pencil template"></span>
+<% } %>
+<% script('/components/bower_components/ckeditor/ckeditor.js') %>
+<% script('/components/bower_components/ckeditor/adapters/jquery.js') %>
+<% script('/views/modules/blog/js/blog.js') %>

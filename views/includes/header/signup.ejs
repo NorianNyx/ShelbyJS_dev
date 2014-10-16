@@ -1,0 +1,30 @@
+<div style="display:none; padding: 10px; padding-top: 0px; width: 300px;" id="signupForm">
+    <h3>Sign Up</h3>
+    <hr />
+    <form action="/signup" method="post">
+        <div class="form-group">
+            <label class="control-label sr-only"></label>
+            <input type="text" placeholder="Username" class="form-control" name="username" id="signupForm_username">
+            <span class="glyphicon form-control-feedback" style="display: none;"></span>
+        </div>
+        <div class="form-group has-feedback">
+            <label class="control-label sr-only"></label>
+            <input type="text" placeholder="Email" class="form-control" name="email" id="signupForm_email">
+            <span class="glyphicon form-control-feedback" style="display: none;"></span>
+        </div>
+        <div class="form-group has-feedback">
+            <label class="control-label sr-only"></label>
+            <input type="password" placeholder="Password" class="form-control" name="password" id="signupForm_password">
+            <span class="glyphicon form-control-feedback" style="display: none;"></span>
+        </div>
+        <div class="form-group has-feedback">
+            <label class="control-label sr-only"></label>
+            <input type="password" placeholder="Confirm Password" class="form-control" name="cofirmpassword" id="signupForm_confirmPassword">
+            <span class="glyphicon form-control-feedback" style="display: none;"></span>
+        </div>
+        <hr />
+        <input type="button" class="btn btn-primary" value="Sign Up" id="signupForm_submitBtn">
+        <input type="reset" class="btn btn-secondary" value="Cancel" onclick="$.fancybox.close();" id="signupForm_cancelBtn" />
+    </form>
+</div>
+<% script('views/includes/header/js/signup.js') %>

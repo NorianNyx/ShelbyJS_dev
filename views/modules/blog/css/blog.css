@@ -1,0 +1,8 @@
+.post {
+    margin-bottom: 40px;
+}
+
+.blog-post-edit-pencil {
+    display: none;
+    cursor: pointer;
+}

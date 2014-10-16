@@ -1,17 +1,55 @@
-module.exports = function (app) {
-    app.locals.isInRole = function (userRoles, role) {
-        return userRoles.indexOf(role) > -1;
-    }
-    
-    app.locals.isInAnyRole = function (userRoles, roles) {
-        return roles.filter(function (role) {
-            return userRoles.indexOf(role) > -1;
-        }).length > 0;
-    }
-    
-    app.locals.isInAllRoles = function (userRoles, roles) {
-        return roles.filter(function (role) {
-            return userRoles.indexOf(role) > -1;
-        }).length == roles.length;
+var gravatar = require('gravatar');
+var siteInfo = require('../config/site.json');
+var User     = require('../models/shelby/user.js');
+
+var helpers = {};
+
+helpers.isAdmin = function (req, res, next) {
+    if (req.isAuthenticated()) {
+        User.isInRole(req.user.Local.Username, 'Administrator', function (err, isInRole) {
+            if (err) {
+                res.send(err);
+            } else {
+                if (isInRole) {
+                    next();
+                } else {
+                    res.redirect('404');
+                }
+            }
+        });
+    } else {
+        res.redirect('404');
     }
 };
+
+helpers.isAuthenticated = function (req, res, next) {
+    if (req.isAuthenticated()) {
+        next();
+    } else {
+        req.flash('loginMessage', 'You must be logged in to do that.');
+        res.redirect('/');
+    }
+};
+
+helpers.getUserRoles = function (req, res, page) {
+    User.getUserRolesByUsername(req.user.Local.Username, function (err, roles) {
+        var roleNames = [];
+        roles.forEach(function (role, index) {
+            roleNames.push(role.RoleName);
+        });
+        helpers.renderPage(req, res, roleNames, page);
+    });
+};
+
+helpers.renderPage = function (req, res, roles, page) {
+    res.render(page, {
+        isAuthenticated: req.isAuthenticated(),
+        user: req.user,
+        message : req.flash('loginMessage') + req.flash('signupMessage'),
+        siteInfo : siteInfo,
+        gravatarUrl: req.isAuthenticated() ? gravatar.url(req.user.Local.Email, { s: '200', r: 'pg' }, true) : '',
+        userRoles: roles
+    });
+};
+
+module.exports = helpers;

@@ -2,23 +2,23 @@
 <html>
     <head>
         <title><%= siteInfo.sitename %></title>
-        <link href="/bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
-        <link href="/bower_components/fancybox/source/jquery.fancybox.css" rel="stylesheet" />
-        <link href="/shelby/css/shelby.css" rel="stylesheet" />
+        <link href="components/bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
+        <link href="components/bower_components/fancybox/source/jquery.fancybox.css" rel="stylesheet" />
+        <link href="components/shelby/css/shelby.css" rel="stylesheet" />
         <%- stylesheets %>
     </head>
     <body>
-        <% if (isInRole(userRoles, 'Administrator')) { %>
-            <% include ../includes/admin/adminbar.ejs %>
+        <% if (isInRole('Administrator')) { %>
+            <% include ../includes/admin/adminbar/adminbar.ejs %>
         <% } %>
-        <% include ../includes/header.ejs %>
+        <% include ../includes/header/header.ejs %>
         <%- body -%>
-        <% include ../includes/footer.ejs %>
+        <% include ../includes/footer/footer.ejs %>
         <div class="loader"></div>
-        <script src="/bower_components/jquery/dist/jquery.min.js"></script>
-        <script src="/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
-        <script src="/bower_components/fancybox/source/jquery.fancybox.js"></script>
-        <script src="/shelby/js/signup.js"></script>
+        <script src="components/bower_components/jquery/dist/jquery.min.js"></script>
+        <script src="components/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+        <script src="components/bower_components/fancybox/source/jquery.fancybox.js"></script>
+        <script src="components/shelby/js/shelby.js"></script>
         <%- scripts %>
     </body>
 </html>

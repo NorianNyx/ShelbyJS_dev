@@ -1,7 +1,8 @@
-var gravatar = require('gravatar');
-var fs       = require('fs');
-var siteInfo = require('../config/site.json');
-var User     = require('../models/shelby/user.js');
+var isAdmin         = require('./helpers.js').isAdmin;
+var isAuthenticated = require('./helpers.js').isAuthenticated;
+var getUserRoles    = require('./helpers.js').getUserRoles;
+var renderPage      = require('./helpers.js').renderPage;
+var fs              = require('fs');
 
 module.exports = function (app, passport) {
     app.get('/', function (req, res) {
@@ -43,7 +44,7 @@ module.exports = function (app, passport) {
     
     app.get('/:view', function (req, res) {
         if (req.isAuthenticated()) {
-            fs.exists('../views/' + req.params.view + '.ejs', function (exists) {
+            fs.exists('../views/controllers/' + req.params.view.toLowerCase() + '.ejs', function (exists) {
                 if (exists) {
                     getUserRoles(req, res, req.params.view);
                 } else {
@@ -57,7 +58,7 @@ module.exports = function (app, passport) {
     
     app.get('/*', function (req, res) {
         if (req.isAuthenticated()) {
-            fs.exists('../views/' + req.url.split('/')[1] + '.ejs', function (exists) {
+            fs.exists('../views/controllers/' + req.url.split('/')[1].toLowerCase() + '.ejs', function (exists) {
                 if (exists) {
                     getUserRoles(req, res, req.url.split('/')[1]);
                 } else {
@@ -80,52 +81,4 @@ module.exports = function (app, passport) {
         failureRedirect: '/',
         failureFlash: true
     }));
-    
-    function isAdmin(req, res, next) {
-        if (req.isAuthenticated()) {
-            User.isInRole(req.user.Local.Username, 'Administrator', function (err, isInRole) {
-                if (err) {
-                    res.send(err);
-                } else {
-                    if (isInRole) {
-                        next();
-                    } else {
-                        res.redirect('404');
-                    }
-                }
-            });
-        } else {
-            res.redirect('404');
-        }
-    }
-    
-    function isAuthenticated(req, res, next) {
-        if (req.isAuthenticated()) {
-            next();
-        } else {
-            req.flash('loginMessage', 'You must be logged in to do that.');
-            res.redirect('/');
-        }
-    }
-    
-    function getUserRoles(req, res, page) {
-        User.getUserRolesByUsername(req.user.Local.Username, function (err, roles) {
-            var roleNames = [];
-            roles.forEach(function (role, index) {
-                roleNames.push(role.RoleName);
-            });
-            renderPage(req, res, roleNames, page);
-        });
-    }
-    
-    function renderPage(req, res, roles, page) {
-        res.render(page, {
-            isAuthenticated: req.isAuthenticated(),
-            user: req.user,
-            message : req.flash('loginMessage') + req.flash('signupMessage') + req.flash('passwordInvalid'),
-            siteInfo : siteInfo,
-            gravatarUrl: req.isAuthenticated() ? gravatar.url(req.user.Local.Email, { s: '200', r: 'pg' }, true) : '',
-            userRoles: roles
-        });
-    }
 };
