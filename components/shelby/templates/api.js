@@ -1,4 +1,4 @@
-var User = require('../../models/shelby/user.js');
+var Shelby = require('../shelby.js');
 
 module.exports = function (app) {
     app.get('/xx/helloworld', isAuthenticated, function (req, res) {
@@ -20,7 +20,7 @@ module.exports = function (app) {
     
     function isAdmin(req, res, next) {
         if (req.isAuthenticated()) {
-            User.isInRole(req.user.Local.Username, 'Administrator', function (err, isInRole) {
+            Shelby.isInRole(req.user.Local.Username, 'Administrator', function (err, isInRole) {
                 if (err) {
                     res.send(err);
                 } else {

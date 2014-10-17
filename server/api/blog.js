@@ -1,5 +1,5 @@
 var Post            = require('../../models/blog/post.js');
-var User            = require('../../models/shelby/user.js');
+var Shelby          = require('../shelby.js');
 var isAuthenticated = require('../helpers.js').isAuthenticated;
 var sanitizer       = require('sanitize-html');
 
@@ -74,7 +74,7 @@ module.exports = function (app) {
     //make sure this user is an admin, and return a 401 if not
     function isAdmin(req, res, next) {
         if (req.isAuthenticated()) {
-            User.isInRole(req.user.Local.Username, 'Administrator', function (err, isInRole) {
+            Shelby.Users.isInRole(req.user.Local.Username, 'Administrator', function (err, isInRole) {
                 if (err) {
                     res.send(err);
                 } else {

@@ -1,12 +1,12 @@
 var gravatar = require('gravatar');
 var siteInfo = require('../config/site.json');
-var User     = require('../models/shelby/user.js');
+var Shelby   = require('./shelby.js');
 
 var helpers = {};
 
 helpers.isAdmin = function (req, res, next) {
     if (req.isAuthenticated()) {
-        User.isInRole(req.user.Local.Username, 'Administrator', function (err, isInRole) {
+        Shelby.Users.isInRole(req.user.Local.Username, 'Administrator', function (err, isInRole) {
             if (err) {
                 res.send(err);
             } else {
@@ -32,7 +32,7 @@ helpers.isAuthenticated = function (req, res, next) {
 };
 
 helpers.getUserRoles = function (req, res, page) {
-    User.getUserRolesByUsername(req.user.Local.Username, function (err, roles) {
+    Shelby.Users.getUserRolesByUsername(req.user.Local.Username, function (err, roles) {
         var roleNames = [];
         roles.forEach(function (role, index) {
             roleNames.push(role.RoleName);

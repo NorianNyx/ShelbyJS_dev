@@ -1,12 +1,11 @@
-var User            = require('../../models/shelby/user.js');
-var Role            = require('../../models/shelby/role.js');
+var Shelby          = require('../shelby.js');
 var isAuthenticated = require('../helpers.js').isAuthenticated;
 var fs              = require('fs');
 
 module.exports = function (app) {
     //check to see if this username is taken
     app.get('/shelby/checkUsername', function (req, res) {
-        User.getByUsername(req.query.username, function (err, user) {
+        Shelby.Users.getByUsername(req.query.username, function (err, user) {
             if (err) {
                 res.send(err);
             }
@@ -20,7 +19,7 @@ module.exports = function (app) {
     
     //get the requested user
     app.get('/shelby/getUser', isAdmin, function (req, res) {
-        User.getByUsername(req.query.username, function (err, user) {
+        Shelby.Users.getByUsername(req.query.username, function (err, user) {
             if (err) {
                 res.send(err);
             } else {
@@ -31,7 +30,7 @@ module.exports = function (app) {
     
     //get all users from the DB
     app.get('/shelby/getAllUsers', isAdmin, function (req, res) {
-        User.getAllUsers(function (err, users) {
+        Shelby.Users.getAllUsers(function (err, users) {
             if (err) {
                 res.send(err);
             } else {
@@ -42,7 +41,7 @@ module.exports = function (app) {
     
     //get all users from the DB and filter the data
     app.get('/shelby/getAllUserInfos', isAdmin, function (req, res) {
-        User.getAllUsers(function (err, users) {
+        Shelby.Users.getAllUsers(function (err, users) {
             if (err) {
                 res.send(err);
             } else {
@@ -62,7 +61,7 @@ module.exports = function (app) {
     
     //get all roles from the DB and filter the data
     app.get('/shelby/getAllRoleInfos', isAdmin, function (req, res) {
-        Role.getAllRoles(function (err, roles) {
+        Shelby.Roles.getAllRoles(function (err, roles) {
             if (err) {
                 res.send(err);
             } else {
@@ -79,7 +78,7 @@ module.exports = function (app) {
     
     //get all users in a specified role
     app.get('/shelby/getUsersByRoleName', isAdmin, function (req, res) {
-        User.getUsersByRoleName(req.query.rolename, function (err, users) {
+        Shelby.Users.getUsersByRoleName(req.query.rolename, function (err, users) {
             if (err) {
                 res.send(err);
             } else {
@@ -99,7 +98,7 @@ module.exports = function (app) {
     
     //add user to specified role
     app.post('/shelby/addUserToRole', isAdmin, function (req, res) {
-        User.addRoleByName(req.body.username, req.body.rolename, function (err, status) {
+        Shelby.Users.addToRoleByRoleName(req.body.username, req.body.rolename, function (err, status) {
             if (err) {
                 res.send(err);
             } else {
@@ -110,7 +109,7 @@ module.exports = function (app) {
     
     //create a role
     app.post('/shelby/createRole', isAdmin, function (req, res) {
-        Role.addRole(req.body.rolename, function (err, status) {
+        Shelby.Roles.addRole(req.body.rolename, function (err, status) {
             if (err) {
                 res.send(err);
             } else {
@@ -139,7 +138,7 @@ module.exports = function (app) {
     
     //update the user's profile information (should update to PUT in future revision)
     app.post('/shelby/updateProfile', isAuthenticated, function (req, res) {
-        User.getByUsername(req.user.Local.Username, function (err, user) {
+        Shelby.Users.getByUsername(req.user.Local.Username, function (err, user) {
             if (err) {
                 res.send(err);
             } else {
@@ -160,7 +159,7 @@ module.exports = function (app) {
     
     //update the user's password (should update to PUT in future revision)
     app.post('/shelby/updatePassword', isAuthenticated, function(req, res) {
-        User.getByUsername(req.user.Local.Username, function (err, user) {
+        Shelby.Users.getByUsername(req.user.Local.Username, function (err, user) {
             if (err) {
                 res.send(err);
             } else {
@@ -178,7 +177,7 @@ module.exports = function (app) {
     
     //delete the specified user (should be updated to DELETE in future revision)
     app.post('/shelby/deleteUser', isAdmin, function (req, res) {
-        User.getByUsername(req.body.username, function (err, user) {
+        Shelby.Users.getByUsername(req.body.username, function (err, user) {
             if (err) {
                 res.send(err);
             } else {
@@ -190,7 +189,7 @@ module.exports = function (app) {
     
     //remove a user from a role (should probably be a put, kind of ambiguous)
     app.post('/shelby/removeUserFromRole', isAdmin, function (req, res) {
-        User.removeUserFromRole(req.body.username, req.body.rolename, function (err, status) {
+        Shelby.Users.removeUserFromRole(req.body.username, req.body.rolename, function (err, status) {
             if (err) {
                 res.send(err);
             } else {
@@ -316,7 +315,7 @@ module.exports = function (app) {
     //make sure this user is an admin, and return a 401 if not
     function isAdmin(req, res, next) {
         if (req.isAuthenticated()) {
-            User.isInRole(req.user.Local.Username, 'Administrator', function (err, isInRole) {
+            Shelby.Users.isInRole(req.user.Local.Username, 'Administrator', function (err, isInRole) {
                 if (err) {
                     res.send(err);
                 } else {

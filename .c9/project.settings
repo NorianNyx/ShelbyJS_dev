@@ -2,7 +2,14 @@
     "run": {
         "@path": "/.c9/runners",
         "configs": {
-            "json()": {},
+            "json()": {
+                "nodemon": {
+                    "debug": true,
+                    "name": "nodemon",
+                    "command": "nodemon server/app.js",
+                    "runner": "Node.js (default)"
+                }
+            },
             "@inited": "true"
         }
     },
